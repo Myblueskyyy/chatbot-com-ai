@@ -199,34 +199,88 @@ if "messages" not in st.session_state:
 
 st.markdown("""
 <style>
-    .stApp { background-color: #0a0a0f; }
-    .header {
-        text-align: center;
-        padding: 1rem 0 0.5rem;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { font-family: 'Inter', -apple-system, sans-serif; }
+    .stApp { background: #f0f4f8; color: #1a2332; }
+
+    .header { text-align: center; padding: 1.5rem 0 0.5rem; }
     .header h1 {
         background: linear-gradient(135deg, #00d2ff, #3a7bd5);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        font-size: 2.2rem;
-        margin: 0;
+        font-size: 2rem; margin: 0; font-weight: 700;
     }
-    .header p {
-        color: #888;
-        margin: 0;
-        font-size: 0.9rem;
+    .header p { color: #64748b; margin: 0.25rem 0 0; font-size: 0.9rem; }
+
+    .main-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
     }
-    .suggestion-btn button {
-        background: #1a1a2e !important;
-        border: 1px solid #333 !important;
-        color: #ccc !important;
+
+    .chat-row { display: flex; gap: 0.5rem; }
+    .chat-row > div { flex: 1; }
+
+    .stButton button {
+        background: #ffffff !important;
+        color: #1a2332 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 10px !important;
         font-size: 0.85rem !important;
+        font-weight: 500 !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+        transition: all 0.15s !important;
     }
-    .suggestion-btn button:hover {
+    .stButton button:hover {
         border-color: #00d2ff !important;
-        color: #00d2ff !important;
+        color: #00b4d8 !important;
+        box-shadow: 0 2px 8px rgba(0,210,255,0.12) !important;
     }
+
+    div[data-testid="stChatMessage"] {
+        background: transparent !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stChatMessage"]:nth-child(odd) {
+        background: #ffffff !important;
+        border-radius: 12px;
+        padding: 0.75rem 1rem !important;
+        margin: 0.5rem 0;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    div[data-testid="stChatMessage"]:nth-child(even) {
+        background: #e8f4fd !important;
+        border-radius: 12px;
+        padding: 0.75rem 1rem !important;
+        margin: 0.5rem 0;
+    }
+
+    .stChatFloatingInputContainer {
+        background: #ffffff !important;
+        border-top: 1px solid #e2e8f0 !important;
+        padding: 0.75rem 0 !important;
+    }
+    div[data-testid="stChatInput"] textarea {
+        background: #f8fafc !important;
+        color: #1a2332 !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 12px !important;
+        font-size: 0.9rem !important;
+    }
+    div[data-testid="stChatInput"] textarea:focus {
+        border-color: #00d2ff !important;
+        box-shadow: 0 0 0 3px rgba(0,210,255,0.1) !important;
+    }
+
+    .stMarkdown, .stChatMessage p, .stChatMessage li { color: #1a2332 !important; }
+    .stAlert { background: #fff !important; color: #1a2332 !important; border: 1px solid #e2e8f0 !important; }
     footer { visibility: hidden; }
+    #MainMenu { visibility: hidden; }
+
+    div[data-testid="stDecoration"] { display: none; }
+    header[data-testid="stHeader"] { background: transparent !important; }
 </style>
 <div class="header">
     <h1>🖥️ Mbsky Store - Rakit PC Anda!</h1>
@@ -289,7 +343,7 @@ def process_prompt(prompt):
 
     rate_ok, wait_time = check_rate_limit()
     if not rate_ok:
-        st.rerun()
+        return f"⏳ Mohon tunggu {wait_time} detik sebelum bertanya lagi."
 
     st.session_state.request_timestamps.append(time.time())
     return st.write_stream(generate_response(prompt))
