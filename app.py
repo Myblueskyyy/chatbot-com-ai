@@ -4,7 +4,7 @@ import time
 import re
 from google import genai
 
-st.set_page_config(page_title="PC Kompatibel", page_icon="🖥️", layout="centered")
+st.set_page_config(page_title="Mbsky Store - Rakit PC Anda!", page_icon="🖥️", layout="centered")
 
 # ── RATE LIMIT ──────────────────────────────────────────────────────────────────
 
@@ -107,7 +107,7 @@ DATA_STR = format_data(df)
 
 # ── SYSTEM PROMPT ──────────────────────────────────────────────────────────────
 
-SYSTEM_PROMPT = f"""Kamu adalah asisten spesialis perakitan PC untuk toko "PC Kompatibel".
+SYSTEM_PROMPT = f"""Kamu adalah asisten spesialis perakitan PC untuk toko "Mbsky Store - Rakit PC Anda!".
 Tugasmu SATU-SATUNYA adalah membantu pengguna memilih dan merakit komponen PC.
 
 ── BATASAN KETAT ──
@@ -147,7 +147,7 @@ API_KEY = get_api_key()
 
 if not API_KEY:
     st.markdown(
-        "<h1 style='text-align:center; color:#00d2ff;'>🖥️ PC Kompatibel</h1>",
+        "<h1 style='text-align:center; color:#00d2ff;'>🖥️ Mbsky Store - Rakit PC Anda!</h1>",
         unsafe_allow_html=True,
     )
     st.markdown(
@@ -185,7 +185,7 @@ if "messages" not in st.session_state:
         {
             "role": "assistant",
             "content": (
-                "Halo! 🖥️ Saya asisten **PC Kompatibel**.\n\n"
+                "Halo! 🖥️ Saya asisten **Mbsky Store - Rakit PC Anda!**.\n\n"
                 "Ceritakan kebutuhan PC-mu:\n"
                 "• 💰 **Budget** berapa?\n"
                 "• 🎯 Mau dipakai untuk **(gaming, office, editing, desain)**?\n"
@@ -229,26 +229,10 @@ st.markdown("""
     footer { visibility: hidden; }
 </style>
 <div class="header">
-    <h1>🖥️ PC Kompatibel</h1>
-    <p>💡 Asisten rakit PC dari toko komputer Anda</p>
+    <h1>🖥️ Mbsky Store - Rakit PC Anda!</h1>
+    <p>💡 Asisten perakitan PC dari toko kami</p>
 </div>
 """, unsafe_allow_html=True)
-
-# ── SUGGESTED QUESTIONS ────────────────────────────────────────────────────────
-
-if len(st.session_state.messages) <= 1:
-    st.markdown("##### 🔍 Coba tanya:")
-    cols = st.columns(2)
-    suggestions = [
-        "🎮 PC gaming budget 8 juta",
-        "💼 PC kantoran 5 jutaan",
-        "🎬 PC editing video 10jt",
-        "🔄 Upgrade PC lama saya",
-    ]
-    for i, s in enumerate(suggestions):
-        if cols[i % 2].button(s, use_container_width=True, key=f"sug_{i}"):
-            st.session_state.pending = s
-            st.rerun()
 
 # ── RATE LIMIT INDICATOR ────────────────────────────────────────────────────────
 
@@ -276,6 +260,22 @@ def generate_response(prompt):
     for chunk in response:
         if chunk.text:
             yield chunk.text
+
+# ── SUGGESTED QUESTIONS ────────────────────────────────────────────────────────
+
+if len(st.session_state.messages) <= 1:
+    st.markdown("##### 🔍 Coba tanya:")
+    cols = st.columns(2)
+    suggestions = [
+        "🎮 PC gaming budget 8 juta",
+        "💼 PC kantoran 5 jutaan",
+        "🎬 PC editing video 10jt",
+        "🔄 Upgrade PC lama saya",
+    ]
+    for i, s in enumerate(suggestions):
+        if cols[i % 2].button(s, use_container_width=True, key=f"sug_{i}"):
+            st.session_state.pending = s
+            st.rerun()
 
 def process_prompt(prompt):
     verdict = is_allowed(prompt)
@@ -322,7 +322,7 @@ if prompt := st.chat_input("Tanyakan tentang rakit PC..."):
 st.divider()
 st.markdown(
     "<p style='text-align:center;color:#555;font-size:0.75rem;'>"
-    "Data produk berdasarkan stok toko. Harga dapat berubah sewaktu-waktu.<br>"
+    "© Mbsky Store. Data produk berdasarkan stok toko. Harga dapat berubah sewaktu-waktu.<br>"
     "Powered by Google Gemini &nbsp;·&nbsp; "
     "<a href='https://streamlit.io' style='color:#555;'>Streamlit</a></p>",
     unsafe_allow_html=True,
